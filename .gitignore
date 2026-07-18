@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# Environment
+.env
+.env.local
+*.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Docker
+*.log
+docker-data/
+
+# Alembic
+backend/alembic/versions/*.pyc
+
+# Flutter
+frontend/build/
+frontend/.dart_tool/
+frontend/.packages
+frontend/.pub/
+frontend/pubspec.lock
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/ios/Pods/
+frontend/ios/.symlinks/
+frontend/android/.gradle/
+frontend/android/local.properties
+frontend/.idea/
+frontend/*.iml
+
+# Node
+node_modules/
+
+# Secrets
+**/secrets/
+**/certs/
+*.pem
+*.key
+
+# Logs
+logs/
+*.log
+
+# Database
+pgdata/
+redis-data/
+
+# OS
+Thumbs.db
+Desktop.ini
