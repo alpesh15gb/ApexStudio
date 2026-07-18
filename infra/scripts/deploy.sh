@@ -23,8 +23,8 @@ echo "  ╚═══════════════════════
 echo -e "${NC}"
 
 # Configuration
-REPO_URL="${REPO_URL:-https://github.com/your-org/apex-studio.git}"
-BRANCH="${BRANCH:-main}"
+REPO_URL="${REPO_URL:-https://github.com/alpesh15gb/ApexStudio.git}"
+BRANCH="${BRANCH:-master}"
 INSTALL_DIR="${INSTALL_DIR:-/opt/apex-studio}"
 VPS_IP="$(curl -4 -fsSL ifconfig.me 2>/dev/null || echo 'YOUR_SERVER_IP')"
 

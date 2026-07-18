@@ -14,69 +14,44 @@ Deploy Apex Studio on your Ubuntu VPS (no domain required — works over IP).
 ssh root@your-vps-ip
 ```
 
-## Step 2: Run the Deployment Script
+## Step 2: Install Docker
 
 ```bash
-# Install dependencies & Docker
 apt-get update && apt-get install -y curl git
 curl -fsSL https://get.docker.com | bash
 curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 ```
 
-## Step 3: Copy Project Files to VPS
-
-**On your local machine** (where Apex Studio code is), run:
+## Step 3: Clone the Repository
 
 ```bash
-# Replace with your VPS IP
-export VPS_IP=your-vps-ip
-
-# Copy all files (excluding dev artifacts)
-rsync -avz --exclude '.git' --exclude '__pycache__' --exclude '.venv' \
-      --exclude 'node_modules' --exclude 'frontend/build' \
-      ./ root@$VPS_IP:/opt/apex-studio/
+cd /opt
+git clone https://github.com/alpesh15gb/ApexStudio.git apex-studio
+cd apex-studio
 ```
 
-## Step 4: Configure & Launch on VPS
-
-**Back on the VPS** (or continue in SSH):
+## Step 4: Configure Environment
 
 ```bash
-cd /opt/apex-studio
+# Copy the .env.example and fill in your VPS IP
+cp .env.example .env
 
-# Create environment file
-cat > .env << 'EOF'
-APP_ENV=production
-APP_DEBUG=false
-APP_LOG_LEVEL=INFO
-APP_SECRET_KEY=$(openssl rand -hex 32)
-APP_API_URL=http://YOUR_VPS_IP
-APP_FRONTEND_URL=http://YOUR_VPS_IP
+# Get your VPS IP automatically
+VPS_IP=$(curl -4 -fsSL ifconfig.me)
 
-DATABASE_URL=postgresql+asyncpg://apex:apex@postgres:5432/apex_studio
-REDIS_URL=redis://redis:6379/0
+# Update .env with your IP
+sed -i "s/localhost/$VPS_IP/g" .env
+sed -i "s/APP_DEBUG=true/APP_DEBUG=false/g" .env
 
-JWT_SECRET_KEY=$(openssl rand -hex 32)
-JWT_ACCESS_TOKEN_EXPIRE_MINUTES=30
-JWT_REFRESH_TOKEN_EXPIRE_DAYS=7
+# Generate secure random keys
+sed -i "s/change-this-to-a-random-secret-key/$(openssl rand -hex 32)/g" .env
+sed -i "s/change-this-to-a-jwt-secret-key/$(openssl rand -hex 32)/g" .env
+```
 
-DOCKER_HOST=unix:///var/run/docker.sock
-WORKSPACE_BASE_PATH=./workspaces
+## Step 5: Launch Everything
 
-S3_ENDPOINT=http://minio:9000
-S3_ACCESS_KEY=minioadmin
-S3_SECRET_KEY=minioadmin
-S3_BUCKET=apex-studio
-
-OMNIROUTE_API_KEY=your-key-here
-OMNIROUTE_DEFAULT_MODEL=claude-sonnet-5
-EOF
-
-# Replace IP placeholder
-sed -i "s/YOUR_VPS_IP/$(curl -4 -fsSL ifconfig.me)/g" .env
-
-# Launch everything
+```bash
 docker-compose -f infra/docker-compose.vps.yml up -d --build
 ```
 
