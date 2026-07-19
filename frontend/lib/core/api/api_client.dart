@@ -73,6 +73,15 @@ class ApiClient {
   Future<Response> sendChatMessage(String projectId, String message) =>
       _dio.post('/ai/chat', data: {'project_id': projectId, 'message': message});
 
+  // Auth token management
+  void setToken(String token) {
+    _dio.options.headers['Authorization'] = 'Bearer $token';
+  }
+
+  void clearToken() {
+    _dio.options.headers.remove('Authorization');
+  }
+
   // Workspace
   Future<Response> startWorkspace(String projectId) =>
       _dio.post('/workspace-runtime/$projectId/start');
