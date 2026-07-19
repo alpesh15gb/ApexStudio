@@ -1,8 +1,5 @@
-version: "3.8"
-
-# Apex Studio — VPS Deployment (No SSL / IP-based)
-# Overrides docker-compose.prod.yml for HTTP-only operation.
-# Once you have a domain, switch to docker-compose.prod.yml with SSL.
+# Apex Studio — VPS Deployment (System-level Nginx)
+# Services are exposed on non-conflicting ports for system Nginx to proxy to.
 
 services:
   postgres:
@@ -61,6 +58,8 @@ services:
       dockerfile: Dockerfile
     container_name: apex-backend
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"   # Only accessible locally, system Nginx proxies to it
     env_file:
       - ../.env
     environment:
@@ -81,31 +80,18 @@ services:
       timeout: 5s
       retries: 3
 
-  # Flutter frontend served via Nginx
   frontend:
     build:
       context: ../frontend
       dockerfile: Dockerfile
     container_name: apex-frontend
     restart: unless-stopped
-    networks:
-      - apex_network
-    depends_on:
-      - backend
-
-  nginx:
-    image: nginx:alpine
-    container_name: apex-nginx
-    restart: unless-stopped
     ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.vps.conf:/etc/nginx/conf.d/default.conf:ro
+      - "127.0.0.1:8080:80"     # Only accessible locally, system Nginx proxies to it
     networks:
       - apex_network
     depends_on:
       - backend
-      - frontend
 
 networks:
   apex_network:

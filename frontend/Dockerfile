@@ -1,5 +1,6 @@
 # Flutter Web build stage
-FROM flutter:3.22 AS build
+# Using Cirrus Labs official Flutter Docker image
+FROM ghcr.io/cirruslabs/flutter:3.22.4 AS build
 
 WORKDIR /app
 
