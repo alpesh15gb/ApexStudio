@@ -41,7 +41,10 @@ class User(Base):
 
     # Relationships
     organization_memberships: Mapped[List[OrganizationMember]] = relationship(
-        "OrganizationMember", back_populates="user", lazy="selectin"
+        "OrganizationMember",
+        back_populates="user",
+        lazy="selectin",
+        foreign_keys="OrganizationMember.user_id",
     )
 
     @property
