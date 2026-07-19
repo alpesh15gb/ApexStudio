@@ -1,23 +1,11 @@
-# Flutter Web build stage
-# Using Cirrus Labs official Flutter Docker image
-FROM ghcr.io/cirruslabs/flutter:3.22.4 AS build
+# Apex Studio Frontend — Nginx static server
+# Build Flutter Web first using: bash infra/scripts/build-frontend.sh
+# Then this container serves the pre-built files.
 
-WORKDIR /app
-
-# Copy project files
-COPY . .
-
-# Get dependencies
-RUN flutter pub get
-
-# Build for web
-RUN flutter build web --release
-
-# Production stage with Nginx
 FROM nginx:alpine
 
-# Copy Flutter web build
-COPY --from=build /app/build/web /usr/share/nginx/html
+# Copy pre-built Flutter web app
+COPY ./build/web /usr/share/nginx/html
 
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
