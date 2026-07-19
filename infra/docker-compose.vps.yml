@@ -59,7 +59,7 @@ services:
     container_name: apex-backend
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8000:8000"   # Only accessible locally, system Nginx proxies to it
+      - "127.0.0.1:8002:8000"   # Only accessible locally, system Nginx proxies to it
     env_file:
       - ../.env
     environment:
@@ -87,7 +87,7 @@ services:
     container_name: apex-frontend
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8080:80"     # Only accessible locally, system Nginx proxies to it
+      - "127.0.0.1:8081:80"     # Only accessible locally, system Nginx proxies to it
     networks:
       - apex_network
     depends_on:
