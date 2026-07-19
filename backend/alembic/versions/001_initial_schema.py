@@ -78,7 +78,7 @@ def upgrade() -> None:
         sa.Column("description", sa.Text(), nullable=True),
         sa.Column("status", sa.Enum("draft", "discovering", "planning", "building", "ready", "deploying", "deployed", "failed", name="project_status"), nullable=False, default="draft"),
         sa.Column("app_type", sa.String(100), nullable=True),
-        sa.Column("metadata", postgresql.JSONB(), nullable=True, default=dict),
+        sa.Column("extra_metadata", postgresql.JSONB(), nullable=True, default=dict),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), onupdate=sa.func.now(), nullable=True),
     )
@@ -132,7 +132,7 @@ def upgrade() -> None:
         sa.Column("network_name", sa.String(255), nullable=True),
         sa.Column("volumes", postgresql.JSONB(), nullable=True, default=dict),
         sa.Column("resource_limits", postgresql.JSONB(), nullable=True, default=dict),
-        sa.Column("metadata", postgresql.JSONB(), nullable=True, default=dict),
+        sa.Column("extra_metadata", postgresql.JSONB(), nullable=True, default=dict),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
         sa.Column("updated_at", sa.DateTime(timezone=True), onupdate=sa.func.now(), nullable=True),
     )
@@ -147,7 +147,7 @@ def upgrade() -> None:
         sa.Column("url", sa.String(500), nullable=True),
         sa.Column("health_check_path", sa.String(255), nullable=True),
         sa.Column("build_logs", sa.Text(), nullable=True),
-        sa.Column("metadata", postgresql.JSONB(), nullable=True, default=dict),
+        sa.Column("extra_metadata", postgresql.JSONB(), nullable=True, default=dict),
         sa.Column("deployed_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("rolled_back_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
@@ -192,7 +192,7 @@ def upgrade() -> None:
         sa.Column("session_id", postgresql.UUID(as_uuid=True), sa.ForeignKey("ai_sessions.id", ondelete="CASCADE"), nullable=True),
         sa.Column("role", sa.Enum("user", "assistant", "system", "tool", name="memory_role"), nullable=False),
         sa.Column("content", sa.Text(), nullable=False),
-        sa.Column("metadata", postgresql.JSONB(), nullable=True, default=dict),
+        sa.Column("extra_metadata", postgresql.JSONB(), nullable=True, default=dict),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
     )
 
@@ -239,7 +239,7 @@ def upgrade() -> None:
         sa.Column("period_start", sa.DateTime(timezone=True), nullable=True),
         sa.Column("period_end", sa.DateTime(timezone=True), nullable=True),
         sa.Column("paid_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("metadata", postgresql.JSONB(), nullable=True, default=dict),
+        sa.Column("extra_metadata", postgresql.JSONB(), nullable=True, default=dict),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False),
     )
 

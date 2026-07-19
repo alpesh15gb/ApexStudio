@@ -45,7 +45,7 @@ class Deployment(Base):
     url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     health_check_path: Mapped[str | None] = mapped_column(String(255), nullable=True)
     build_logs: Mapped[str | None] = mapped_column(Text, nullable=True)
-    metadata: Mapped[dict | None] = mapped_column(JSONB, nullable=True, default=dict)
+    extra_metadata: Mapped[dict | None] = mapped_column(JSONB, nullable=True, default=dict)
     deployed_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )

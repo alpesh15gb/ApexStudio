@@ -134,7 +134,7 @@ class WorkspaceOrchestrator:
 
         except Exception as e:
             instance.status = "failed"
-            instance.metadata = {"error": str(e)}
+            instance.extra_metadata = {"error": str(e)}
             await self.db.flush()
             logger.error(f"Failed to provision workspace for {project.id}: {e}")
             raise

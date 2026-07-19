@@ -23,7 +23,7 @@ class ProjectResponse(UUIDBaseSchema, TimestampSchema):
     description: str | None = None
     status: str
     app_type: str | None = None
-    metadata: dict | None = None
+    extra_metadata: dict | None = None
 
 
 class ProjectRequirementResponse(BaseSchema):
