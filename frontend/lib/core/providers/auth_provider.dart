@@ -47,7 +47,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       final response = await _api.login(email, password);
       final token = response.data['access_token'] as String;
-      _api.dio.options.headers['Authorization'] = 'Bearer $token';
+      _api.setToken(token);
       state = AuthState(
         isAuthenticated: true,
         token: token,
@@ -64,7 +64,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       final response = await _api.register(email, password, fullName);
       final token = response.data['access_token'] as String;
-      _api.dio.options.headers['Authorization'] = 'Bearer $token';
+      _api.setToken(token);
       state = AuthState(
         isAuthenticated: true,
         token: token,
@@ -77,7 +77,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   void logout() {
-    _api.dio.options.headers.remove('Authorization');
+    _api.clearToken();
     state = const AuthState();
   }
 }

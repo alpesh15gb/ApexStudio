@@ -1,8 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/app_config.dart';
-
-final apiClientProvider = Provider<ApiClient>((ref) => ApiClient());
 
 class ApiClient {
   late final Dio _dio;
