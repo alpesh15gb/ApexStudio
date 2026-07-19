@@ -6,7 +6,7 @@ class ApiClient {
 
   ApiClient() {
     _dio = Dio(BaseOptions(
-      baseUrl: AppConfig.apiUrl,
+      baseUrl: AppConfig.apiUrl.isNotEmpty ? '${AppConfig.apiUrl}/api/v1' : '/api/v1',
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       headers: {'Content-Type': 'application/json'},
