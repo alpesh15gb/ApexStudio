@@ -46,6 +46,17 @@ cd /opt/apex-studio
 docker-compose -f infra/docker-compose.vps.yml up -d --build
 ```
 
+## Step 4b: Build Frontend (if Flutter Web isn't built)
+
+```bash
+cd /opt/apex-studio
+chmod +x infra/scripts/build-frontend.sh
+./infra/scripts/build-frontend.sh
+
+# Rebuild frontend container with the freshly built files
+docker-compose -f infra/docker-compose.vps.yml up -d --build --force-recreate frontend
+```
+
 Services will start on local-only ports:
 - **Backend API:** `127.0.0.1:8000`
 - **Frontend:** `127.0.0.1:8080`
