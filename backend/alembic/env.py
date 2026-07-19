@@ -1,5 +1,6 @@
 """Alembic environment configuration."""
 
+import os
 from logging.config import fileConfig
 
 from alembic import context
@@ -7,6 +8,11 @@ from sqlalchemy import engine_from_config, pool
 
 # Alembic Config object
 config = context.config
+
+# Override DB URL from environment (for Docker networking)
+sync_url = os.environ.get("DATABASE_SYNC_URL")
+if sync_url:
+    config.set_main_option("sqlalchemy.url", sync_url)
 
 # Set up logging
 if config.config_file_name is not None:

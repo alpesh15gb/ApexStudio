@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -21,21 +22,29 @@ async def lifespan(app: FastAPI):
         settings.app_env,
     )
 
-    # Startup: verify DB connection
-    from app.core.database import engine
-
+    # Startup: run DB migrations
     try:
-        async with engine.connect() as conn:
-            await conn.execute(
-                __import__("sqlalchemy").text("SELECT 1")
-            )
-        logger.info("Database connection verified")
+        logger.info("Running database migrations...")
+        proc = await asyncio.create_subprocess_exec(
+            "alembic", "upgrade", "head",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.STDOUT,
+        )
+        stdout, _ = await asyncio.wait_for(proc.communicate(), timeout=30)
+        if proc.returncode == 0:
+            logger.info("Migrations complete")
+        else:
+            output = stdout.decode() if stdout else ""
+            logger.error("Migration failed: %s", output)
+    except FileNotFoundError:
+        logger.warning("alembic not found — skipping migrations")
     except Exception as e:
-        logger.warning("Database not reachable at startup: %s", e)
+        logger.warning("Migration error (non-fatal): %s", e)
 
     yield
 
     # Shutdown
     logger.info("Shutting down %s", settings.app_name)
+    from app.core.database import engine
     await engine.dispose()
     logger.info("Database connections closed")
