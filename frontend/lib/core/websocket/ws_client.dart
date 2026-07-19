@@ -16,7 +16,10 @@ class WebSocketClient {
   bool get isConnected => _isConnected;
 
   void connect(String projectId) {
-    final uri = Uri.parse('${AppConfig.wsUrl}/ws/chat/$projectId');
+    final wsBase = AppConfig.wsUrl.isEmpty
+        ? '${Uri.base.scheme == "https" ? "wss" : "ws"}://${Uri.base.host}'
+        : AppConfig.wsUrl;
+    final uri = Uri.parse('$wsBase/ws/chat/$projectId');
     _channel = WebSocketChannel.connect(uri);
     _isConnected = true;
 
