@@ -84,5 +84,6 @@ class OrganizationMember(Base):
         "Organization", back_populates="members"
     )
     user: Mapped["User"] = relationship(
-        "User", back_populates="organization_memberships"
+        "User", back_populates="organization_memberships",
+        foreign_keys=[user_id],
     )
